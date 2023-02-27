@@ -24,6 +24,9 @@ public class Interview {
     Date durationInterview;
     String stateInterview;
 
+    @Enumerated(EnumType.STRING)
+    TypeGrid typeInterview;
+
     @ManyToOne
     Classroom classroom;
 
@@ -37,6 +40,7 @@ public class Interview {
     Set<MCQ> mcqs;
     @OneToOne
     GridEvaluation gridEvaluation;
+
 
 
 }

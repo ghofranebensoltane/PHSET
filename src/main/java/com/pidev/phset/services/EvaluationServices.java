@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,10 @@ public class EvaluationServices implements IEvaluationServices{
     private final IResponseRepository responseRepository;
     @Autowired
     private final IDecissionRepository decissionRepository;
+    @Autowired
+    private final ITaskEvaluationRpository taskEvaluationRpository;
+    @Autowired
+    private final IInterviewRepository interviewRepository;
 
     //Claim
     @Override
@@ -39,11 +44,7 @@ public class EvaluationServices implements IEvaluationServices{
         return claimRepository.findById(idClaim).orElse(null);
     }
 
-    @Override
-    public void addAndAssignDecissionToClaim(Claim claim){
-        decissionRepository.save(claim.getDecission());
-        claimRepository.save(claim);
-    }
+
 
     @Override
     public List<Claim> retrieveAllClaims() {
@@ -120,20 +121,28 @@ public class EvaluationServices implements IEvaluationServices{
 
 
   //MCQ && Response && Question
+
+
+
     @Override
     @Transactional
     public String addQuestionAndResponseAndAssignResponsestoQuestion(Question question) {
-        System.out.println(question.getResponses());
-        if(question.getResponses().size()<3) {
-            questionRepository.save(question);
-            for (Response r : question.getResponses()) {
-                r.setQuestion(question);
-                responseRepository.save(r);
+        Question q = questionRepository.findByNameQuestion(question.getNameQuestion());
+        if(q==null){
+            if(question.getResponses().size()==3) {
+                questionRepository.save(question);
+                for (Response r : question.getResponses()) {
+                    r.setQuestion(question);
+                    responseRepository.save(r);
+                }
+                return "Add succesfully";
             }
-            return "Add succesfully";
+            else
+                return "Responses must be 3";
         }
-        else
-            return "Responses must be 3 or more";
+        else {
+            return "Question already exist";
+        }
     }
 
     @Override
@@ -187,6 +196,172 @@ public class EvaluationServices implements IEvaluationServices{
     @Override
     public void deleteQuestion(int idQuestion) {
         questionRepository.deleteById(idQuestion);
+    }
+
+    @Override
+    public void addEvaluationAndTaskEvaluationAndAssignTaskToEvaluataion(Evaluation evaluation) {
+        evaluationRepository.save(evaluation);
+        for (TaskEvaluation t : evaluation.getTaskEvaluation()){
+            t.setEvaluation(evaluation);
+            taskEvaluationRpository.save(t);
+        }
+        System.out.println("add Succefully");
+    }
+
+    ///////////////////////////// AUTOMATIQUE ////////////////////////////////
+
+    @Override
+    public GridEvaluation addAutoGrid(/*Interview interview*/){
+        GridEvaluation gridEvaluation = new GridEvaluation();
+        List<Evaluation> evaluations = new ArrayList<>();
+        evaluationRepository.findAll().forEach(evaluations::add);
+        //if(interview.getTypeInterview().equals(TypeGrid.Job)){
+            gridEvaluation.setTypeGrid(TypeGrid.Job);
+            gridEvaluationRepository.save(gridEvaluation);
+            for(Evaluation e : evaluations){
+                if(e.getTypeEvaluation().equals(TypeGrid.Job)){
+                    e.setGridEvaluation(gridEvaluation);
+                    evaluationRepository.save(e);
+                }
+            }
+        //}
+        //else if(interview.getTypeInterview().equals(TypeGrid.Admission)){
+            gridEvaluation.setTypeGrid(TypeGrid.Admission);
+            gridEvaluationRepository.save(gridEvaluation);
+            for(Evaluation e : evaluations){
+                if(e.getTypeEvaluation().equals(TypeGrid.Admission)){
+                    e.setGridEvaluation(gridEvaluation);
+                    evaluationRepository.save(e);
+                }
+            }
+        //}
+        //interview.setGridEvaluation(gridEvaluation);
+        //interviewRepository.save(interview);
+        return gridEvaluation;
+    }
+
+    @Override
+    public List<Question> getRandomQuestions(List<Question> questions, int numQuestions) {
+        List<Question> randomQuestions = new ArrayList<>();
+        Random rand = new Random();
+        int listSize = questions.size();
+        if (numQuestions > listSize) {
+            return questions;
+        }
+        Set<Integer> selectedIndices = new HashSet<>();
+        while (selectedIndices.size() < numQuestions) {
+            int randomIndex = rand.nextInt(listSize);
+            if (!selectedIndices.contains(randomIndex)) {
+                selectedIndices.add(randomIndex);
+                randomQuestions.add(questions.get(randomIndex));
+            }
+        }
+        return randomQuestions;
+    }
+
+
+    @Override
+    @Transactional
+    public List<MCQ> addAutoQcm(/*Interview interview*/) {
+        //if(interview.getTypeInterview().equals(TypeGrid.Admission)){
+        List<MCQ> mcqs = new ArrayList<>();
+        MCQ mcq1 = new MCQ();
+        mcq1.setTitle("MCQ of language skills");
+        mcq1.setTypeTest(TypeTest.Language_Skills);
+        MCQ mcq2 = new MCQ();
+        mcq2.setTitle("MCQ of general culture");
+        mcq2.setTypeTest(TypeTest.General_Culture);
+        //mcq1.setInterview(interview);
+        //mcq2.setInterview(interview);
+        mcqRepository.save(mcq1);
+        mcqRepository.save(mcq2);
+        /*------------- */
+
+        List<Question> LanguageSkillsEasy = questionRepository.findByTypeTestAndQuestionLevel(TypeTest.Language_Skills, QuestionLevel.Easy);
+        getRandomQuestions(LanguageSkillsEasy, 4).forEach(question -> {
+            question.getMcqs().add(mcq1);
+            questionRepository.save(question);
+        });
+        List<Question> LanguageSkillsHard = questionRepository.findByTypeTestAndQuestionLevel(TypeTest.Language_Skills, QuestionLevel.Hard);
+        getRandomQuestions(LanguageSkillsHard, 4).forEach(question -> {
+            question.getMcqs().add(mcq1);
+            questionRepository.save(question);
+        });
+        List<Question> LanguageSkillsMeduim = questionRepository.findByTypeTestAndQuestionLevel(TypeTest.Language_Skills, QuestionLevel.Medium);
+        getRandomQuestions(LanguageSkillsMeduim, 4).forEach(question -> {
+            question.getMcqs().add(mcq1);
+            questionRepository.save(question);
+        });
+        /*------------- */
+        List<Question> GeneralCulture = questionRepository.findByTypeTest(TypeTest.General_Culture);
+        getRandomQuestions(GeneralCulture, 12).forEach(question -> {
+            question.getMcqs().add(mcq2);
+            questionRepository.save(question);
+        });
+        mcqs.add(mcq1);
+        mcqs.add(mcq2);
+        return mcqs;
+        //}else{
+        //return null;
+        //}
+    }
+
+    ///////////////////////////// FIN AUTOMATIQUE ////////////////////////////////
+    /////////////////////////////// A Utiliser ///////////////////////////////////
+
+    @Override
+    public void addAndAssignDecissionToClaim(Claim claim){
+        decissionRepository.save(claim.getDecission());
+        claimRepository.save(claim);
+        // Informer l'utilisateur notif / email
+    }
+
+    @Override
+    public void addClaimaAndAssignAccount(int id, Claim claim){
+        //Account account = accountRepository.findById(id).orElse(null);
+        //claim.setAccount(account);
+        claimRepository.save(claim);
+    }
+
+    @Override
+    public void setScoreToMCQ(int idInterview, int idMCQ, float score){
+        Interview interview = interviewRepository.findById(idInterview).orElse(null);
+        MCQ mcq = mcqRepository.findById(idMCQ).orElse(null);
+        if(mcq != null && interview != null){
+            for(MCQ m : interview.getMcqs()){
+                if(m.getTypeTest().equals(mcq.getTypeTest())){
+                    m.setScore(score);
+                    mcqRepository.save(m);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setScoreToTaskEvaluation(TaskEvaluation taskEvaluation,float note){
+        taskEvaluation.setNote(note);
+        taskEvaluationRpository.save(taskEvaluation);
+    }
+
+    @Override
+    public void calculScoreGrid(int idGrid){
+        float note = 0;
+        GridEvaluation gridEvaluation = gridEvaluationRepository.findById(idGrid).orElse(null);
+        for(Evaluation evaluation : gridEvaluation.getEvaluations()){
+            for(TaskEvaluation taskEvaluation : evaluation.getTaskEvaluation()){
+                note =+ taskEvaluation.getNote();
+            }
+        }
+        gridEvaluation.setScoreGrid(note);
+    }
+
+    @Override
+    public void assignScoreToInterview(Interview interview){
+        float score=0;
+        for (MCQ mcq : interview.getMcqs()){
+            score =+ mcq.getScore();
+        }
+        score =+ interview.getGridEvaluation().getScoreGrid();
     }
 
 }

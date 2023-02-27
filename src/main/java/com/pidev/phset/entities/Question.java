@@ -13,7 +13,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Question implements Serializable{
     @Id
@@ -25,9 +24,12 @@ public class Question implements Serializable{
     @Enumerated(EnumType.STRING)
     TypeTest typeTest;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    QuestionLevel questionLevel;
+
+    @ManyToMany
     @JsonIgnore
-    MCQ mcq;
+    Set<MCQ> mcqs;
 
     @OneToMany(mappedBy = "question")
     Set<Response> responses;

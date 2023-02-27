@@ -30,8 +30,16 @@ public class EvaluationRestController {
         return evaluationServices.addGridEvaluation(gridEvaluation);
     }
 
+    @PutMapping("/addAutoQcm")
+    public List<MCQ> addAutoQcm() {
+        System.out.println("cbon");
+        evaluationServices.addAutoQcm();
+        return  null;
+    }
+
+
     @PostMapping("/addMcq")
-    MCQ addMcq (@RequestBody MCQ mcq){
+        MCQ addMcq (@RequestBody MCQ mcq){
         return evaluationServices.addMcq(mcq);
     }
 
@@ -96,6 +104,17 @@ public class EvaluationRestController {
     List<Question> retrieveAllQuestion(){
         return evaluationServices.retrieveAllQuestion();
     }
+
+    @PutMapping("/EvaluationaAndTasks")
+    public void addEvaluationAndTaskEvaluationAndAssignTaskToEvaluataion(@RequestBody Evaluation evaluation) {
+        evaluationServices.addEvaluationAndTaskEvaluationAndAssignTaskToEvaluataion(evaluation);
+    }
+
+    @PutMapping("/addAutoGrid")
+    public GridEvaluation addAutoGrid(/*Interview interview*/){
+        return evaluationServices.addAutoGrid();
+    }
+
 
 /*
     //update

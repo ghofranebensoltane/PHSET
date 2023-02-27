@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Like implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer LikeId;
     Boolean Status;
 

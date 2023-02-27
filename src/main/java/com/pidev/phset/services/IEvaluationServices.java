@@ -13,8 +13,11 @@ public interface IEvaluationServices {
     public MCQ addMcq (MCQ mcq);
     public void addAndAssignDecissionToClaim(Claim claim);
     public String addQuestionAndResponseAndAssignResponsestoQuestion(Question question);
+    public List<MCQ> addAutoQcm();
+    public List<Question> getRandomQuestions(List<Question> questions, int numQuestions);
 
-    //Find one
+
+        //Find one
     public Claim retrieveClaim(int idClaim);
     public Evaluation retrieveEvaluation(int idEvaluation);
     public GridEvaluation retrieveGridEvaluation(int idGridEvaluation);
@@ -41,4 +44,13 @@ public interface IEvaluationServices {
     public void deleteGridEvaluation(int idGridEvaluation);
     public void deleteMCQ(int idMcq);
     public void deleteQuestion(int idQuestion);
-}
+
+    public void addEvaluationAndTaskEvaluationAndAssignTaskToEvaluataion(Evaluation evaluation);
+    public GridEvaluation addAutoGrid(/*Interview interview*/);
+    public void addClaimaAndAssignAccount(int id, Claim claim);
+
+    public void setScoreToMCQ(int idInterview, int idMCQ, float score);
+    public void setScoreToTaskEvaluation(TaskEvaluation taskEvaluation,float note);
+    public void calculScoreGrid(int idGrid);
+    public void assignScoreToInterview(Interview interview);
+    }

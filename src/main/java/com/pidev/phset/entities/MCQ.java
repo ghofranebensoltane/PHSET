@@ -1,5 +1,6 @@
 package com.pidev.phset.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -26,9 +27,12 @@ public class MCQ implements Serializable {
     @Enumerated(EnumType.STRING)
     TypeTest typeTest;
 
-    @OneToMany (mappedBy = "mcq")
+    @JsonIgnore
+    @ManyToMany (mappedBy = "mcqs")
     Set<Question> questions;
+
     @ManyToOne
+    @JsonIgnore
     Interview interview;
 
 
