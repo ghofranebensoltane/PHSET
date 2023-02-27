@@ -22,7 +22,7 @@ public class Event implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Integer idEvent;
     String titleEvent;
-    Float budgetEvent;
+    Float priceEvent;
     Integer nbPartEvent;
     String descriptionEvent;
 
@@ -33,7 +33,7 @@ public class Event implements Serializable {
     @Enumerated(EnumType.STRING)
     ModePay modePay;
 
-    Integer capacity;
+    //Integer capacity;
 
     @Enumerated(EnumType.STRING)
     Mode modeEvent;
@@ -49,5 +49,9 @@ public class Event implements Serializable {
 
     @ManyToMany
     Set<Speaker> speakers;
+
+
+    @ManyToMany
+    Set<Speaker> speakersconf;
 
 }

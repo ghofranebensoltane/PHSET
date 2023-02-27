@@ -1,6 +1,7 @@
 package com.pidev.phset.services;
 
 import com.pidev.phset.entities.*;
+import com.pidev.phset.repositories.UserRepository;
 
 import java.util.List;
 
@@ -55,9 +56,29 @@ public interface IEventServices {
 
     void removeSTeam(Integer idTeam);
 
-    //Add teamasandsignSubject to team
 
-    //assignPostToteam
+    //Speaker
+    List<Speaker> retrieveAllSpeakers();
+
+    Speaker addSpeaker (Speaker speaker);
+
+    Speaker updateSpeaker (Speaker speaker);
+
+    Speaker retrieveSpeaker (Integer idSpeaker);
+
+    void removeSpeaker(Integer idSpeaker);
+
+    void AssignSpeakerToEvent(int event);
+    public double getScore(Speaker speaker, Event event);
+
+    public void AssignSpeakerToConfirmed(int idsp, int idevent);
+
+    public void assignStudentToTeam();
+/*
+    public Account addAccount (Account account);
+
+    public Inscription addIns(Inscription inscription);
+*/
 
 
 
