@@ -4,12 +4,15 @@ import com.pidev.phset.entities.*;
 import com.pidev.phset.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
-import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +35,15 @@ public class EvaluationServices implements IEvaluationServices{
     private final ITaskEvaluationRpository taskEvaluationRpository;
     @Autowired
     private final IInterviewRepository interviewRepository;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private IUserRepository userRepository;
 
     //Claim
     @Override
     public Claim addClaim(Claim claim) {
+
         return claimRepository.save(claim);
     }
 
@@ -59,8 +67,9 @@ public class EvaluationServices implements IEvaluationServices{
     }
 
     @Override
-    public void deleteClaim(int idClaim) {
+    public Object deleteClaim(int idClaim) {
         claimRepository.deleteById(idClaim);
+        return null;
     }
 
 
@@ -143,6 +152,7 @@ public class EvaluationServices implements IEvaluationServices{
         else {
             return "Question already exist";
         }
+
     }
 
     @Override
@@ -220,7 +230,14 @@ public class EvaluationServices implements IEvaluationServices{
             gridEvaluationRepository.save(gridEvaluation);
             for(Evaluation e : evaluations){
                 if(e.getTypeEvaluation().equals(TypeGrid.Job)){
-                    e.setGridEvaluation(gridEvaluation);
+                    if(e.getGridEvaluations().size()==0){
+                        Set<GridEvaluation> g = new HashSet<>();
+                        g.add(gridEvaluation);
+                        e.setGridEvaluations(g);
+                    }
+                    else{
+                        e.getGridEvaluations().add(gridEvaluation);
+                    }
                     evaluationRepository.save(e);
                 }
             }
@@ -230,7 +247,14 @@ public class EvaluationServices implements IEvaluationServices{
             gridEvaluationRepository.save(gridEvaluation);
             for(Evaluation e : evaluations){
                 if(e.getTypeEvaluation().equals(TypeGrid.Admission)){
-                    e.setGridEvaluation(gridEvaluation);
+                    if(e.getGridEvaluations().size()==0){
+                        Set<GridEvaluation> g = new HashSet<>();
+                        g.add(gridEvaluation);
+                        e.setGridEvaluations(g);
+                    }
+                    else{
+                        e.getGridEvaluations().add(gridEvaluation);
+                    }
                     evaluationRepository.save(e);
                 }
             }
@@ -307,13 +331,31 @@ public class EvaluationServices implements IEvaluationServices{
     }
 
     ///////////////////////////// FIN AUTOMATIQUE ////////////////////////////////
+
     /////////////////////////////// A Utiliser ///////////////////////////////////
 
     @Override
-    public void addAndAssignDecissionToClaim(Claim claim){
+    public void sendEmail(String to, String subject, String body) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body, true);
+
+        mailSender.send(message);
+    }
+
+    @Override
+    public void addAndAssignDecissionToClaim(Claim claim) throws MessagingException {
         decissionRepository.save(claim.getDecission());
         claimRepository.save(claim);
         // Informer l'utilisateur notif / email
+        Inscription ins = claim.getAccount().getInscription();
+        String body = "Good morining," + ins.getFirstName() + " " + ins.getLastName() +".\n"
+                + " Your claim about : '" + claim.getObject() + "' is already traited.\n"+
+                "Please check your claims to more informations";
+        sendEmail(ins.getEmail(),"Important: Your Claim Decision Has Been Made",body);
     }
 
     @Override
@@ -338,8 +380,9 @@ public class EvaluationServices implements IEvaluationServices{
     }
 
     @Override
-    public void setScoreToTaskEvaluation(TaskEvaluation taskEvaluation,float note){
+    public void setScoreToTaskEvaluation(TaskEvaluation taskEvaluation,float note, String remark){
         taskEvaluation.setNote(note);
+        taskEvaluation.setRemark(remark);
         taskEvaluationRpository.save(taskEvaluation);
     }
 
@@ -356,12 +399,75 @@ public class EvaluationServices implements IEvaluationServices{
     }
 
     @Override
-    public void assignScoreToInterview(Interview interview){
+    public void assignScoreToInterview(Interview interview) throws MessagingException {
         float score=0;
         for (MCQ mcq : interview.getMcqs()){
             score =+ mcq.getScore();
         }
-        score =+ interview.getGridEvaluation().getScoreGrid();
+        if(interview.getGridEvaluation()!=null){
+            score =+ interview.getGridEvaluation().getScoreGrid();
+        }
+        interview.setNoteFinal(score);
+        interviewRepository.save(interview);
+        String body = "";
+        sendEmail(interview.getCondidat().getEmail(),"Score Interview",body);
     }
+
+    @Override
+    public boolean checkDisponibilite(User user, Interview interview) {
+        LocalDateTime startInterview = interview.getDateInterview();
+        LocalDateTime endInterview = interview.getFinInterview();
+        for (Interview listInterviews : user.getInterviewJury()) {
+            LocalDateTime startUserInterview = listInterviews.getDateInterview();
+            LocalDateTime endUserInterview = listInterviews.getFinInterview();
+            if ((startInterview.isAfter(startUserInterview) && startInterview.isBefore(endUserInterview))
+                    || (endInterview.isAfter(startUserInterview) && endInterview.isBefore(endUserInterview))
+                    || startInterview.isEqual(startUserInterview)
+                    || endInterview.isEqual(endUserInterview)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String assignEvaluator(int id) {
+        Interview interview = interviewRepository.findById(id).orElse(null);
+        Set<User> evaluateursDisponibles = new HashSet<>();
+        List<User> professors = userRepository.findByRole(Role.Professor);
+        if(interview.getJury().size()<3){
+            for (User e : professors) {
+                if (checkDisponibilite(e, interview)) {
+                    evaluateursDisponibles.add(e);
+                    if (evaluateursDisponibles.size() == 3) {
+                        break;
+                    }
+                }
+            }
+            for(User u : evaluateursDisponibles){
+                if(u.getInterviewJury().size()==0){
+                    Set<Interview> newinterview = new HashSet<>();
+                    newinterview.add(interview);
+                    u.setInterviewJury(newinterview);
+                }
+                else {
+                    u.getInterviewJury().add(interview);
+                }
+                userRepository.save(u);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Claim> sortClaimByDate() {
+        List<Claim> claims = new ArrayList<>();
+        claimRepository.findAll().forEach(claims::add);
+        Collections.sort(claims, Comparator.comparing(Claim::getDateClaim));
+        return claims;
+    }
+
+
 
 }

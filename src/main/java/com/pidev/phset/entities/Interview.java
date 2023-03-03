@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -20,9 +21,10 @@ public class Interview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idInterview;
     String refInterview;
-    Date dateInterview;
-    Date durationInterview;
+    LocalDateTime dateInterview;
+    LocalDateTime finInterview;
     String stateInterview;
+    float noteFinal;
 
     @Enumerated(EnumType.STRING)
     TypeGrid typeInterview;
@@ -33,13 +35,18 @@ public class Interview {
     @OneToOne
     JuryAppreciation juryAppreciation;
 
-    @ManyToMany
-    Set<Account> accounts;
-
     @OneToMany(mappedBy = "interview")
     Set<MCQ> mcqs;
     @OneToOne
     GridEvaluation gridEvaluation;
+
+    @OneToOne
+    User condidat;
+
+    @ManyToMany(mappedBy = "interviewJury")
+    Set<User> jury;
+
+
 
 
 

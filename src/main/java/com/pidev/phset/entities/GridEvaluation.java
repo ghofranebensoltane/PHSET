@@ -24,14 +24,13 @@ public class GridEvaluation implements Serializable{
 
     float scoreGrid;
 
-    @OneToMany(mappedBy = "gridEvaluation")
+    @ManyToMany(mappedBy = "gridEvaluations")
     Set<Evaluation> evaluations;
 
     @OneToOne(mappedBy = "gridEvaluation")
     Interview Interview;
 
-    @OneToMany(mappedBy = "gridEvaluation")
-    Set<Criteria> criterias;
+
 
 
 

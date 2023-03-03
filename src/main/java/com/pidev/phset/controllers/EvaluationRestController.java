@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,7 @@ public class EvaluationRestController {
         return evaluationServices.addMcq(mcq);
     }
 
-    public void addAndAssignDecissionToClaim(Claim claim){
+    public void addAndAssignDecissionToClaim(Claim claim) throws MessagingException{
         evaluationServices.addAndAssignDecissionToClaim(claim);
     }
 
@@ -113,6 +114,17 @@ public class EvaluationRestController {
     @PutMapping("/addAutoGrid")
     public GridEvaluation addAutoGrid(/*Interview interview*/){
         return evaluationServices.addAutoGrid();
+    }
+
+    @PostMapping("/sendEmail/{to}/{subject}/{body}")
+    public void sendEmail(@PathVariable("to") String to, @PathVariable("subject") String subject, @PathVariable("body") String body) throws MessagingException {
+        evaluationServices.sendEmail(to, subject, body);
+    }
+
+
+    @PutMapping("/affecterEvaluateurs/{id}")
+    public String affecterEvaluateurs(@PathVariable("id") int id) {
+        return evaluationServices.assignEvaluator(id);
     }
 
 

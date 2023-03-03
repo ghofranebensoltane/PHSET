@@ -25,9 +25,9 @@ public class Evaluation implements Serializable {
     @Enumerated(EnumType.STRING)
     TypeGrid typeEvaluation;
 
-    @ManyToOne
+    @ManyToMany
     @JsonIgnore
-    GridEvaluation gridEvaluation;
+    Set<GridEvaluation> gridEvaluations;
 
     @OneToMany(mappedBy = "evaluation")
     Set<TaskEvaluation> taskEvaluation;

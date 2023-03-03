@@ -51,6 +51,4 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account")
     Set<QuestionFAQ> questionFAQ;
 
-    @ManyToMany(mappedBy = "accounts")
-    Set<Interview> interviews;
 }

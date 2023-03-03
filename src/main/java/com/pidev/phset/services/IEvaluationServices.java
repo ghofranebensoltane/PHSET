@@ -2,6 +2,7 @@ package com.pidev.phset.services;
 
 import com.pidev.phset.entities.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface IEvaluationServices {
@@ -11,7 +12,7 @@ public interface IEvaluationServices {
     public Evaluation addEvaluation (Evaluation evaluation);
     public GridEvaluation addGridEvaluation (GridEvaluation gridEvaluation);
     public MCQ addMcq (MCQ mcq);
-    public void addAndAssignDecissionToClaim(Claim claim);
+    public void addAndAssignDecissionToClaim(Claim claim) throws MessagingException;
     public String addQuestionAndResponseAndAssignResponsestoQuestion(Question question);
     public List<MCQ> addAutoQcm();
     public List<Question> getRandomQuestions(List<Question> questions, int numQuestions);
@@ -39,7 +40,7 @@ public interface IEvaluationServices {
     public Question updateQuestionAndResponse(Question question);
 
     //Delete
-    public void deleteClaim(int idClaim);
+    public Object deleteClaim(int idClaim);
     public void deleteEvaluattion(int idEvaluation);
     public void deleteGridEvaluation(int idGridEvaluation);
     public void deleteMCQ(int idMcq);
@@ -50,7 +51,13 @@ public interface IEvaluationServices {
     public void addClaimaAndAssignAccount(int id, Claim claim);
 
     public void setScoreToMCQ(int idInterview, int idMCQ, float score);
-    public void setScoreToTaskEvaluation(TaskEvaluation taskEvaluation,float note);
+    public void setScoreToTaskEvaluation(TaskEvaluation taskEvaluation,float note,String remark);
     public void calculScoreGrid(int idGrid);
-    public void assignScoreToInterview(Interview interview);
+    public void assignScoreToInterview(Interview interview) throws MessagingException ;
+
+    public void sendEmail(String to, String subject, String body) throws MessagingException ;
+    public boolean checkDisponibilite(User user, Interview interview) ;
+    public String assignEvaluator(int id) ;
+    public List<Claim> sortClaimByDate();
+
     }
