@@ -1,0 +1,358 @@
+{
+  "qnas": [
+    {
+      "id": "aow7ck2p7d_forum_problems",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "Forum"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            " What kind of problems did you get with our forum ? Could you please provide more context or information so I can better understand and provide a response ( App0 video / Add event / Post  ) ?\n"
+          ]
+        },
+        "questions": {
+          "en": [
+            "Forum problem",
+            "Hi I have forum problems",
+            "I have problems with the forum",
+            "forum",
+            "forum problems",
+            "i have forum problems",
+            "i have a problem in forum",
+            "I have a problem in forum",
+            "Forum",
+            "i have problems with the forum",
+            "i have forum problem",
+            "I have forum problem"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "f2re6xfh5j_i_want_to_claim_something",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "To submit a claim about something, please consider visiting the website https://esprit.tn/claims."
+          ]
+        },
+        "questions": {
+          "en": [
+            "I want to claim something",
+            "I have a claim",
+            "I have a claim about somthing ",
+            "I will claim somthing",
+            "i will claim somthing",
+            "i have a claim about somthing ",
+            "i have a claim",
+            "i want to claim something",
+            "A claim",
+            "a claim",
+            "claim",
+            "Claim",
+            "Claiming",
+            "I need to claim something",
+            "I must claim something ",
+            "I have to claim about something",
+            "Claim about somthing",
+            "Claim something",
+            "claim something",
+            "claim about something",
+            "I have a claim about my note ",
+            "i have a claim about my note ",
+            "i had to claim",
+            "I had to claim"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "hynwynpsyj_video_for_app0",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "App0 event have a deadline. If you passed the deadline you will be no longer able to post your video. \nIf you have another problem with posting your video please try to contact your administration."
+          ]
+        },
+        "questions": {
+          "en": [
+            "Video for APP0",
+            "video for app0",
+            "post a video for my team ",
+            "posting a video",
+            "Posting a video",
+            "I can't upload a video",
+            "i can't upload a video",
+            "i can't posting a video",
+            "I can not upload video",
+            "i can not posting a video ",
+            "i can not post a video",
+            "I can not post a video ",
+            "my team can't post a video",
+            "My team can't post a video",
+            "my team can not post a video for APP0",
+            "My team can not post a video for APP0",
+            "my team can not post a video for app0",
+            "my team can't upload a video",
+            "My team can't upload a video",
+            "my team can not upload a video for APP0",
+            "My team can not upload a video for APP0",
+            "my team can not upload a video for app0",
+            "My team can not upload a video for app0"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "l0p6cr8pr2_thank_you",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "You're welcome! Please feel free to ask and i will do my best to assist you "
+          ]
+        },
+        "questions": {
+          "en": [
+            "Thank you ",
+            "thank you ",
+            "Thanks ",
+            "thanks",
+            "Thank you  !",
+            "thank you  !",
+            "Thank u",
+            "thank u ",
+            "thank u !",
+            "Thank u !",
+            "Thanks !",
+            "thanks !"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "u71l9rq0si_i_have_email_problems",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "If you are experiencing email problems related to accessing meetings or university email lists, contact the university administration or your teachers to request access. They should be able to assist you with any issues related to email access or specific email lists. It's important to provide them with as much information as possible regarding the issue you are facing so that they can provide you with the appropriate support"
+          ]
+        },
+        "questions": {
+          "en": [
+            "I have email problems",
+            "I have problems with my email",
+            "I didn't recieve email",
+            "I didn't recieve an email",
+            "i have email problems",
+            "I have a problem with my email",
+            "i have a problem with my email",
+            "i didn't recieve email",
+            "i didn't recieve an email",
+            "i don't recieve an email",
+            "i don't recieve an e mail",
+            "i don't recieve an e-mail",
+            "i didn't recieve e-mail",
+            "I don't receive any email",
+            "I don't receive any e_mail",
+            "I don't receive any e mail",
+            "i have a problem with my e-mail",
+            "i don't receive any e_mail",
+            "i  don't receive any email",
+            "i  don't receive any e mail",
+            "i don't receive an email for an interview",
+            "I don't receive an email for an interview",
+            "i didn't receive an email for an interview",
+            "I didn't receive an email for an interview",
+            "i don't receive an email for a training",
+            "I don't receive an email for a training",
+            "i didn't receive an email for a training",
+            "I didn't receive an email for a training",
+            "I didn't receive an email for a reservation ",
+            "i didn't receive an email for a reservation ",
+            "i don't receive an email for a reservation",
+            "I don't receive an email for a reservation",
+            "i don't receive an email for a payement ",
+            "I don't receive an email for a payement ",
+            "i didn't receive an email for a payement ",
+            "I didn't receive an email for a payement "
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "wbfzsig1bn_i_don_t_recieve_my_team_number",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "Please check your team number in the APP0 invitation email. If you can't find it, please try to contact your administration."
+          ]
+        },
+        "questions": {
+          "en": [
+            "I don't recieve my team number ",
+            "i don't recieve my team number ",
+            "I didn't recieve my team number ",
+            "i didn't recieve my team number ",
+            "i didn't recieve my team ",
+            "I didn't recieve my team",
+            "i don't recieve my team",
+            "I don't recieve my team",
+            "How to get my team number ",
+            "how to get my team number ",
+            "How to get my team",
+            "how to get my team",
+            "How to get my team number for app0",
+            "How to get my team number for APP0",
+            "How to get my team for app0",
+            "How to get my team for APP0",
+            "how to get my team number for app0",
+            "how to get my team number for APP0",
+            "how to get my team for app0",
+            "how to get my team for APP0"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "x47psv51lv_i_want_to_claim_something",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "To claim about something. You can post a claim in our claim bord visit https://esprit.tn/claims"
+          ]
+        },
+        "questions": {
+          "en": [
+            "I want to claim something",
+            "I have a claim",
+            "i have a claim",
+            "i want to claim something ",
+            "claim",
+            "Claim",
+            "Claim something ",
+            "i want to claim for something ",
+            "I want to claim for something ",
+            "i want to claim about something ",
+            "I want to claim about something "
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "z00o4ve1lg_i_have_a_problem",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "what kind of problem do you have ?"
+          ]
+        },
+        "questions": {
+          "en": [
+            "I have a problem ",
+            "i have a problem",
+            "I got a problem",
+            "I've got a problem",
+            "i got a problem",
+            "i've got a problem",
+            "I have problems",
+            "i have a problems",
+            "I got a problems",
+            "I've got a problems",
+            "i got a problems",
+            "i've got a problems"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    },
+    {
+      "id": "zoua1oikww_hi",
+      "data": {
+        "action": "text",
+        "contexts": [
+          "global"
+        ],
+        "enabled": true,
+        "answers": {
+          "en": [
+            "Hi !  How can I help you ?"
+          ]
+        },
+        "questions": {
+          "en": [
+            "Hi",
+            "Hey",
+            "Good morning",
+            "hi",
+            "hello",
+            "Good afternoon  ",
+            "good morning",
+            "goodmoorning",
+            "goodmorning",
+            "good afternoon",
+            "goodafternoon",
+            "Good evening",
+            "good evening",
+            "goodevening"
+          ]
+        },
+        "redirectFlow": "",
+        "redirectNode": ""
+      }
+    }
+  ],
+  "contentElements": []
+}
