@@ -93,6 +93,8 @@
         },
         "questions": {
           "en": [
+            "video",
+            "Video",
             "Video for APP0",
             "video for app0",
             "post a video for my team ",
@@ -170,6 +172,8 @@
         },
         "questions": {
           "en": [
+            "email problem",
+            "Email problem",
             "I have email problems",
             "I have problems with my email",
             "I didn't recieve email",
@@ -273,6 +277,8 @@
             "i have a claim",
             "i want to claim something ",
             "claim",
+            "claim ",
+            "Claim ",
             "Claim",
             "Claim something ",
             "i want to claim for something ",
@@ -300,6 +306,10 @@
         },
         "questions": {
           "en": [
+            "problem",
+            "Problem ",
+            "problem",
+            "problem ",
             "I have a problem ",
             "i have a problem",
             "I got a problem",
@@ -353,6 +363,5 @@
         "redirectNode": ""
       }
     }
-  ],
-  "contentElements": []
+  ]
 }

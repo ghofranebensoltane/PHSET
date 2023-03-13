@@ -1,22 +1,23 @@
 package com.pidev.phset.configures;
-
 import com.pidev.phset.services.EvaluationServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
-
-    @Autowired
-    private EvaluationServices evaluationServices;
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new ClaimWebSocketHandler(evaluationServices), "/claims").setAllowedOrigins("*");
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/dashboard");
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/dashboard-websocket").withSockJS();
     }
 
 }

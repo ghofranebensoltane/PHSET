@@ -24,6 +24,8 @@ public class MCQ implements Serializable {
 
     float score;
 
+
+
     @Enumerated(EnumType.STRING)
     TypeTest typeTest;
 

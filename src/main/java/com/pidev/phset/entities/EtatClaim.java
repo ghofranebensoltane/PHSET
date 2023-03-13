@@ -1,5 +1,5 @@
 package com.pidev.phset.entities;
 
 public enum EtatClaim {
-    Traited,No_Traited,Being_Processed,Refused
+    Traited,No_Traited,Refused
 }
