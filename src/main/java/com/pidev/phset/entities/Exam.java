@@ -30,9 +30,10 @@ public class Exam implements Serializable {
     @OneToOne(mappedBy = "exam")
     Cours cours;
 
+    /*
     @OneToOne(mappedBy = "exam")
     Certificate certificate;
-
+*/
     @OneToMany(mappedBy = "exam")
     Set<QuestionExam> questionExams;
 }

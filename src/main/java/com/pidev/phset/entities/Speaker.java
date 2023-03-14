@@ -1,10 +1,13 @@
 package com.pidev.phset.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -21,7 +24,7 @@ public class Speaker implements Serializable {
 
     String nameSpeaker;
 
-    String Biography ;
+    String biography ;
 
     String numTelSpeaker;
 
@@ -29,11 +32,14 @@ public class Speaker implements Serializable {
 
     String socialMediaSpeaker;
 
-    Boolean dispoSpeaker;
+    String activationCode;
 
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "speakers")
     Set<Event> events;
+
+    @ManyToMany(mappedBy = "speakersconf")
+    Set<Event> eventsconf;
 
 
 

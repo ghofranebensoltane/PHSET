@@ -1,10 +1,12 @@
 package com.pidev.phset.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -18,16 +20,18 @@ public class Reservation implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Integer idRes;
-    @Temporal(TemporalType.DATE)
-    Date dateRes;
+
+    LocalDateTime dateRes = LocalDateTime.now();
     Boolean etatPres ;
 
+    boolean confirmPay = false;
+
     @ManyToOne
+            @JsonIgnore
     Event event;
 
     @ManyToOne
-    Inscription inscription;
-
-    @ManyToOne
+            @JsonIgnore
     Account account;
+
 }

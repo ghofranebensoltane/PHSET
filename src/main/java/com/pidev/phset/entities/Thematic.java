@@ -22,7 +22,6 @@ public class Thematic implements Serializable {
 
     String descriptionThem;
 
-
     @OneToMany(mappedBy = "thematic")
     Set<Subject> subjects;
 }

@@ -17,10 +17,10 @@ import java.util.Set;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUser;
+     private Integer idUser;
     private String firstName;
     private String lastName;
-    private Integer cin;
+     private Integer cin;
     private String email;
     private Integer phone;
     private String address;
