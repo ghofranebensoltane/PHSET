@@ -13,8 +13,6 @@ public class AdmissionServicesImpl implements IAdmissionServices {
     @Autowired
     IClassroomRepository classroomRepository;
     @Autowired
-    ICriteriaRepository criteriaRepository;
-    @Autowired
     IInscriptionRepository inscriptionRepository;
     @Autowired
     IInterviewRepository interviewRepository;
@@ -78,31 +76,6 @@ public class AdmissionServicesImpl implements IAdmissionServices {
     }
 
     //////// ****** CRITERIA Services ****** ////////
-
-    @Override
-    public Criteria addCriteria(Criteria criteria) {
-        return criteriaRepository.save(criteria);
-    }
-
-    @Override
-    public Criteria updateCriteria(Criteria criteria) {
-        return criteriaRepository.save(criteria);
-    }
-
-    @Override
-    public void removeCriteria(Integer idCriteria) {
-        criteriaRepository.deleteById(idCriteria);
-    }
-
-    @Override
-    public Criteria retrieveCriteria(Integer idCriteria) {
-        return criteriaRepository.findById(idCriteria).orElse(null);
-    }
-
-    @Override
-    public List<Criteria> retrieveAllCriteria() {
-        return (List<Criteria>) criteriaRepository.findAll();
-    }
 
     //////// ****** INSCRIPTION Services ****** ////////
 

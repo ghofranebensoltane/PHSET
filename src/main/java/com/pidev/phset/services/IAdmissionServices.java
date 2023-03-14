@@ -24,11 +24,6 @@ public interface IAdmissionServices {
 
     //////// ****** CRITERIA Services ****** ////////
 
-    Criteria addCriteria(Criteria criteria);
-    Criteria updateCriteria(Criteria criteria);
-    void removeCriteria(Integer idCriteria);
-    Criteria retrieveCriteria(Integer idCriteria);
-    List<Criteria> retrieveAllCriteria();
 
     //////// ****** INSCRIPTION Services ****** ////////
 

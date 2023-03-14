@@ -1,5 +1,6 @@
 package com.pidev.phset.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,11 +22,14 @@ public class Team implements Serializable {
     String nameTeam;
 
     @OneToOne(mappedBy = "team")
+            @JsonIgnore
     PostVideo postVideo;
 
     @OneToOne(mappedBy = "team")
+    @JsonIgnore
     Subject subject;
 
     @OneToMany(mappedBy = "team")
+    @JsonIgnore
     Set<Account> accounts;
 }
