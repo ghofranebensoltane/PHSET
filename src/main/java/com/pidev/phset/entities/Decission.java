@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,7 +22,7 @@ public class Decission implements Serializable{
 
     String decission;
 
-    Date dateDecission;
+    LocalDateTime dateDecission = LocalDateTime.now();
 
     @OneToOne(mappedBy = "decission")
     Claim claim;

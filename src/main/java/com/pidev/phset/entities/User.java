@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -30,9 +32,12 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user")
     Account account;
 
-
     @OneToOne(mappedBy = "user")
     Inscription inscription;
 
+    @OneToOne(mappedBy = "condidat")
+    Interview interview;
+    @ManyToMany
+    Set<Interview> interviewJury;
 
 }

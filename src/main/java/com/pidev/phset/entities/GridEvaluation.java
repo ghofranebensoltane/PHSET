@@ -1,5 +1,6 @@
 package com.pidev.phset.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,7 +13,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GridEvaluation implements Serializable{
     @Id
@@ -24,14 +24,15 @@ public class GridEvaluation implements Serializable{
 
     float scoreGrid;
 
-    @OneToMany(mappedBy = "gridEvaluation")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "gridEvaluations")
     Set<Evaluation> evaluations;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "gridEvaluation")
-    Interview Interview;
+    Interview interview;
 
-    @OneToMany(mappedBy = "gridEvaluation")
-    Set<Criteria> criterias;
+
 
 
 

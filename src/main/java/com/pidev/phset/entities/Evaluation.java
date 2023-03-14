@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,11 +22,13 @@ public class Evaluation implements Serializable {
 
     String taskEval;
 
-    String remark;
+    @Enumerated(EnumType.STRING)
+    TypeGrid typeEvaluation;
 
-    float noteEval;
-
-    @ManyToOne
+    @ManyToMany
     @JsonIgnore
-    GridEvaluation gridEvaluation;
+    Set<GridEvaluation> gridEvaluations;
+
+    @OneToMany(mappedBy = "evaluation")
+    Set<TaskEvaluation> taskEvaluation;
 }
