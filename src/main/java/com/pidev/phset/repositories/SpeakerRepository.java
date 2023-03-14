@@ -7,4 +7,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface SpeakerRepository extends CrudRepository<Speaker, Integer> {
+
+    Speaker findSpeakerByActivationCode(String activationCode);
 }

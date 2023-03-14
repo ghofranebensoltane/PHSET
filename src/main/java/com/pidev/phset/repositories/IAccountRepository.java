@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IAccountRepository extends CrudRepository<Account, Integer> {
 
-    @Query("select a from Account a inner join a.inscription ins where ins.classStudent ='1'")
+    @Query("select a from Account a inner join a.inscription ins where ins.classStudent ='1' and ins.user.role='Student'")
     List<Account> retrieveAccount();
+
+
 }

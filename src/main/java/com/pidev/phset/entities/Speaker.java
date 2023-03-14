@@ -32,6 +32,8 @@ public class Speaker implements Serializable {
 
     String socialMediaSpeaker;
 
+    String activationCode;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "speakers")
     Set<Event> events;

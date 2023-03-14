@@ -66,4 +66,7 @@ public class Account implements Serializable {
     @ManyToMany(mappedBy = "accounts")
     @JsonIgnore
     Set<Interview> interviews;
+
+    @OneToMany(mappedBy = "account")
+    Set<Certificate> certificates;
 }
