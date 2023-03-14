@@ -9,6 +9,12 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface IUserRepository extends CrudRepository<User,Integer> {
+    Optional<User> findByFirstName(String username);
+
+    Boolean existsByFirstName(String username);
+
+    Boolean existsByEmail(String email);
+    
     List<User> findByRole(Role a);
 
     @Query("select u from User u where u.idUser = ?1")
