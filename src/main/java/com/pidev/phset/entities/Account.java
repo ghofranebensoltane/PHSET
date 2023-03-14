@@ -1,14 +1,22 @@
 package com.pidev.phset.entities;
 
-import javafx.geometry.Pos;
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -53,4 +61,6 @@ public class Account implements Serializable {
 
     @ManyToMany(mappedBy = "accounts")
     Set<Interview> interviews;
+    @OneToMany(cascade = CascadeType.ALL)
+    Set<Post> post;
 }

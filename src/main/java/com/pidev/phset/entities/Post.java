@@ -1,37 +1,71 @@
 package com.pidev.phset.entities;
 
-import lombok.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.pidev.phset.entities.Account;
+import com.pidev.phset.entities.Comment;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@ToString
-public class Post  implements Serializable {
+public class Post implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer PostId;
+    Integer postId;
+
     String postTitle;
 
-    Date DatedeCreation;
+     LocalDateTime createdAt;
+
     String body;
+
+
     int nb_Signal;
+
+
     int nb_etoil;
-    Date StartDate;
-    Date EndDate;
-    int nbrIntialdesvues;
-    int nbrFinaldesvues;
-    float price;
-    int nb_like;
+
+
     @ManyToOne
+    @JsonIgnore
     Account account;
 
-    @OneToOne
-    Like like;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    List<React> Reacts;
+
+
+@JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    List<Comment> comments ;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    List<React> reacts;
+
+
+
+
 }

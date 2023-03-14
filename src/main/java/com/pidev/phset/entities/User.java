@@ -23,6 +23,7 @@ public class User implements Serializable {
     private Integer phone;
     private String address;
     private String files;
+    private Integer age;
     private Boolean availability;
     @Enumerated(EnumType.STRING)
     private  Role role;
