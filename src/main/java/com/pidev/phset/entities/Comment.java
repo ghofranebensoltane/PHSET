@@ -1,29 +1,59 @@
 package com.pidev.phset.entities;
 
-import lombok.*;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
-@Entity
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+
+
 @Getter
 @Setter
-public class Comment implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@ToString
+public class Comment implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-     int CommentId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer postCommentId;
+
     String commentBody;
 
-    Date commenteDate;
-    //@ManyToOne
-    //User user; qui veut ecrire une commentaire
+    Date commentedAt;
+
+    @JsonIgnore
+
     @ManyToOne
-    Post post;  //publication qui on veut le commenter
+    Account account; // The user who wants to comment
+
+    @JsonIgnore
     @ManyToOne
-    Comment comment;
+    Post post; // The post to comment
+
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postCo")
+    Set<Comment> postComments; //Reflexive association : A comment can have multiple replies
+    @JsonIgnore
+    @ManyToOne
+    Comment postCo;
+
+
+    @OneToMany(mappedBy = "comments")
+    Set<React> reacts;
+
+
 
 }
