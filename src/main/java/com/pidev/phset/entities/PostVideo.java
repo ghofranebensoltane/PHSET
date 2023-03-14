@@ -2,9 +2,12 @@ package com.pidev.phset.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.File;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,12 +23,11 @@ public class PostVideo implements Serializable {
     Integer idPostVid;
     String descriptionPostVid;
 
-    Integer nbLikePostVid;
+    Integer nbLikePostVid = 0;
 
     String linkPostVid;
 
-    @Temporal(TemporalType.DATE)
-    Date datePostVid;
+    LocalDateTime datePostVid = LocalDateTime.now();
 
     @OneToOne
     Team team;

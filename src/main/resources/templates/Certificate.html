@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate of Participation</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            margin: auto;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: brown;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: blue;
+        }
+        .ok {
+            color: black;
+            font-weight: bold;
+        }
+
+        .date {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .signature {
+            margin-top: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .signature img {
+            max-width: 200px;
+            margin-top: 10px;
+        }
+        img{
+            max-width: 300px;
+        }
+
+        section,.border{
+            border: 1px solid black;
+            width: 86vw;
+            min-height: 90vh;
+            background-color: white;
+        }
+        .border{
+            margin: 2vh auto;
+        }
+        .id {
+            color: darkgray;
+        }
+
+        .flex-center{
+            padding: 5%;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -ms-flex-line-pack: center;
+            align-content: center;
+        }
+
+        .center{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="border">
+    <section class="grid">
+        <div class="col-12 flex-center">
+            <div class="center">
+                <h2 class="uppercase">Certificate of Participation</h2>
+                <br>
+                <p>This certificate is presented to</p>
+                <p class="name" th:text="${certificat.account.inscription.user.lastName + ' ' + certificat.account.inscription.user.firstName}"></p>
+                <p>has satisfied all requirments and compleated the course </p>
+                <p class="ok" th:text="${event.titleEvent}"></p>
+            </div>
+        </div>
+        <div class="col-6">
+                <br>
+            <p class="id" th:text="${certificat.uniqueId}"></p>
+            <img src="https://fr.wikipedia.org/wiki/Signature#/media/Fichier:Autograph_of_Benjamin_Franklin.svg" >
+        </div>
+    </section>
+</div>
+</body>
+</html>

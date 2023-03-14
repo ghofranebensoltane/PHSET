@@ -1,5 +1,6 @@
 package com.pidev.phset.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,10 +18,21 @@ public class Certificate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idCertif;
-    String nameCertif;
-    Integer serialNumberCertif;
+    String titleCertif;
+
+    String bodyCertif;
+
     String signatureCertif;
 
-    @OneToOne
-    Exam exam;
+    String UniqueId;
+
+    byte[] qrCode;
+
+    byte[] pdfBytes;
+
+    String certifUrl;
+    @JsonIgnore
+    @ManyToOne
+    Account account;
+
 }
