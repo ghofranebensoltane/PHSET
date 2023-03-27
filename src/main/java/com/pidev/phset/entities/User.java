@@ -1,9 +1,7 @@
 package com.pidev.phset.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,35 +10,47 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUser;
-    private String firstName;
-    private String lastName;
-    private Integer cin;
-    private String email;
-    private Integer phone;
-    private String address;
-    private String files;
-    private String Password;
-    private Boolean availability;
+    Integer idUser;
+    String firstName;
+    String lastName;
+    Integer cin;
+    String email;
+    String phone;
+    String address;
+    String files;
+    String Password;
+
+    String passport;
+    Date birthDate;
+    @Enumerated(EnumType.STRING)
+    Civility civility;
+    String nationality;
     @Enumerated(EnumType.STRING)
     private  Role role;
 
-    @OneToOne(mappedBy = "user")
-    Account account;
+    @OneToMany(mappedBy = "user")
+    Set<UserAvailability> userAvailabilities;
 
 
     @OneToOne(mappedBy = "user")
     Inscription inscription;
 
+    @OneToOne(mappedBy = "condidat")
+    Interview interview;
+    @ManyToMany
+    Set<Interview> interviewJury;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

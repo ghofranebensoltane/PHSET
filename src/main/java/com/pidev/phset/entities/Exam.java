@@ -28,7 +28,7 @@ public class Exam implements Serializable {
     Float scoreExam;
 
     @OneToOne(mappedBy = "exam")
-    Cours cours;
+    Course course;
 
     /*
     @OneToOne(mappedBy = "exam")

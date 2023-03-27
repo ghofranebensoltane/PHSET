@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReservationRepository extends CrudRepository<Reservation, Integer> {
 
-    List<Reservation> findReservationsByAccount_User(User u);
+    List<Reservation> findReservationsByAccount_Inscription_User(User u);
 }

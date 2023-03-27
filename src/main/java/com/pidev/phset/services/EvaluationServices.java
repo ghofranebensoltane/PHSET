@@ -310,7 +310,7 @@ public class EvaluationServices implements IEvaluationServices{
         interview.setGridEvaluation(gridEvaluation);
         interviewRepository.save(interview);
 
-        for(User u : userRepository.findByRole(Role.Professor)){
+        for(User u : userRepository.findByRole(Role.ROLE_Professor)){
             if(u.getInterviewJury().contains(interview)){
                 String to = u.getEmail();
                 String object = "Grid evaluation interview";
@@ -506,7 +506,6 @@ public class EvaluationServices implements IEvaluationServices{
             if(interview.getNoteFinal()>=12){
                 interview.setEtatInterview(EtatInterview.Accepted);
                 emailPayement(interview);
-
             }
             else if( interview.getNoteFinal() < 12 && interview.getNoteFinal() >= 8 ) /*&& interview.getNoteFinal()>=8*/{
                 interview.setEtatInterview(EtatInterview.Pending);
@@ -668,7 +667,7 @@ public class EvaluationServices implements IEvaluationServices{
     @Override
     public String assignEvaluator(Interview interview) {
         Set<User> evaluateursDisponibles = new HashSet<>();
-        List<User> professors = userRepository.findByRole(Role.Professor);
+        List<User> professors = userRepository.findByRole(Role.ROLE_Professor);
         if(interview.getDateInterview().isAfter(LocalDateTime.now())){
             if(interview.getJury()==null || interview.getJury().size()<3 && interview.getJury().size()!=2){
                 for (User e : professors) {
@@ -835,7 +834,7 @@ public class EvaluationServices implements IEvaluationServices{
 
         prof.getInterviewJury().remove(interview);
         userRepository.save(prof);
-        List<User> professors = userRepository.findByRole(Role.Professor);
+        List<User> professors = userRepository.findByRole(Role.ROLE_Professor);
         professors.remove(prof);
         for (User e : professors) {
             if (checkDisponibilite(e, interview)) {
@@ -1116,7 +1115,5 @@ public class EvaluationServices implements IEvaluationServices{
         List<Claim> claims = findClaimsByObject(object);
         return claims;
     }
-
-
 
 }

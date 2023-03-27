@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableAspectJAutoProxy
+@EnableJpaRepositories
 public class PhsetApplication {
 
     public static void main(String[] args) {

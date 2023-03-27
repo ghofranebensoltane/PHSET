@@ -5,7 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -14,19 +14,14 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Cours implements Serializable {
+public class ClassState implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer idCours;
-    String nameCours;
-    String descriptionCours;
-    Integer creditCours;
-    String professorCours;
-    String unit;
+    Integer idClassState;
+    LocalDateTime date;
+    boolean availability;
 
-    @ManyToMany
-    Set<Training> trainings;
+    @ManyToOne
+    Classroom classroom;
 
-    @OneToOne
-    Exam exam;
 }

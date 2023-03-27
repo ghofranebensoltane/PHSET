@@ -1,6 +1,5 @@
 package com.pidev.phset.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.DocumentException;
 import com.pidev.phset.entities.*;
@@ -228,31 +227,6 @@ public class EvaluationRestController {
     @Autowired
     private RestHighLevelClient elasticsearchClient;
 
-    @GetMapping("/sea")
-    public List<Claim> searchClaims(@RequestParam("query") String query) throws IOException {
-        SearchRequest searchRequest = new SearchRequest("claims");
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchQuery("content", query));
-        searchRequest.source(searchSourceBuilder);
-
-        SearchResponse searchResponse = elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
-        ObjectMapper objectMapper= new ObjectMapper();
-        SearchHits hits = searchResponse.getHits();
-        List<Claim> results = Arrays.stream(hits.getHits())
-                .map(hit -> {
-                    String source = hit.getSourceAsString();
-                    Claim claim = null;
-                    try {
-                        claim = objectMapper.readValue(source, Claim.class);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    return claim;
-                })
-                .collect(Collectors.toList());
-
-        return results;
-    }
 
     @GetMapping("/excel")
     public void exportLastMonthTraitdClaimsToExcel() {
@@ -280,6 +254,10 @@ public class EvaluationRestController {
         return evaluationServices.addInterview(interview, id);
     }
 
+    @PutMapping("/assignScoreToInterview")
+    public void assignScoreToInterview() throws MessagingException {
+        evaluationServices.assignScoreToInterview();
+    }
 
 
 /*

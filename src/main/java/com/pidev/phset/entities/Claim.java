@@ -36,6 +36,7 @@ public class Claim implements Serializable {
 
     LocalDateTime dateClaim = LocalDateTime.now();
 
+    @JsonIgnore
     byte[] image;
 
     @JsonIgnore

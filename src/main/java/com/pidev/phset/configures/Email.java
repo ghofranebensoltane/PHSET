@@ -18,9 +18,9 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.Properties;
 
-@Configuration
+//@Configuration
 public class Email {
-
+/*
     @Value("${spring.mail.host}")
     private String host;
 
@@ -48,5 +48,5 @@ public class Email {
         props.put("mail.debug", "true");
 
         return mailSender;
-    }
+    }*/
 }

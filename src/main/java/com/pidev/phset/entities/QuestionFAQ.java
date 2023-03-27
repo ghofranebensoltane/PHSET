@@ -27,8 +27,8 @@ public class QuestionFAQ implements Serializable {
     @ManyToMany
     Set<Tag> tags;
 
-    @OneToMany(mappedBy = "questionFAQ")
-    Set<ReponseFAQ> reponseFAQS;
+    @OneToOne(mappedBy = "questionFAQ")
+    ReponseFAQ reponseFAQ;
 
     @ManyToOne
     Account account;

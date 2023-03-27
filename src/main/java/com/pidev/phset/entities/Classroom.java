@@ -26,6 +26,9 @@ public class Classroom {
     @OneToMany(mappedBy = "classroom")
     List<Interview>interviews;
 
+    @OneToMany(mappedBy = "classroom")
+    List<ClassState> classStates;
+
     @ManyToOne
     Event event;
 }

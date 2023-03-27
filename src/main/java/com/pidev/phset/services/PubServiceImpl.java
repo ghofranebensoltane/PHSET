@@ -28,6 +28,7 @@ public class PubServiceImpl implements IPublicityService {
     @Override
     public void addPublicityForAccounts(int minAge, int maxAge, String name, String text, Date startDate, Date endDate,
                                         int nbrInitialDesvues, int nbrFinalDesvues, float price )  {
+        /*
         List<Account> accounts = accountRepository.findByUserAgeBetween(minAge, maxAge);
         for (Account account : accounts) {
             Publicity publicity = new Publicity();
@@ -44,6 +45,8 @@ public class PubServiceImpl implements IPublicityService {
             publicityRepository.save(publicity);
 
         }
+
+         */
     }
 
 

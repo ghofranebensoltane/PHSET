@@ -20,18 +20,18 @@ public class Training implements Serializable {
     String titleTraining;
     String descriptionTraining;
     String durationTraining;
-    String subjectTraining;
+    Technology subjectTraining;
     String levelTraining;
     Float priceTraining;
-    String stateTraining;
+    Integer stateTraining = 0;
     @Enumerated(EnumType.STRING)
     TypeTraining typeTraining;
 
     @OneToMany(mappedBy = "training")
     Set<AvisTraining> avisTrainings;
 
-    @ManyToMany(mappedBy = "trainings")
-    Set<Cours> cours;
+    @OneToMany(mappedBy = "training")
+    Set<Course> courses;
 
     @ManyToMany
     Set<Account> accounts;

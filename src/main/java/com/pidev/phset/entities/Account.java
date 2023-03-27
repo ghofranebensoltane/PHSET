@@ -22,13 +22,10 @@ public class Account implements Serializable {
     private Integer idAccount;
     private String emailAccount;
     private String passwordAcccount;
-    @OneToOne
-            @JsonIgnore
-    User user;
+
 
     @OneToMany(mappedBy = "account")
     @JsonIgnore
-
     Set<Reservation> reservations;
 
     @ManyToOne
@@ -62,7 +59,6 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account")
     @JsonIgnore
     Set<QuestionFAQ> questionFAQ;
-
 
     @OneToMany(mappedBy = "account")
     Set<Certificate> certificates;

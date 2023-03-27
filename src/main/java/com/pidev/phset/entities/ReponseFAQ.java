@@ -19,6 +19,6 @@ public class ReponseFAQ implements Serializable {
     Integer idReponseFAQ;
     String nameReponseFAQ;
 
-    @ManyToOne
+    @OneToOne
     QuestionFAQ questionFAQ;
 }

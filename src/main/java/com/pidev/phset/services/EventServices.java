@@ -232,6 +232,7 @@ public class EventServices implements IEventServices {
     public void assignStudentToTeam() throws MessagingException {
         List<Account> accounts = accountRepository.retrieveAccount(); // Par classe 1
         List<Team> teams = new ArrayList<>();
+
         //Creation des comptes depend de nombre des etudiants
         for (int a = 0; a < accounts.size(); a = a + 5) {
             Team t = new Team();
@@ -280,7 +281,7 @@ public class EventServices implements IEventServices {
 
         for (Team p : teams) {
             for (Account o : accounts) {
-                if (o.getInscription().getUser().getRole().equals(Role.Professor) && o.getTeam() == null) {
+                if (o.getInscription().getUser().getRole().equals(Role.ROLE_Professor) && o.getTeam() == null) {
                     o.setTeam(p);
                 }
             }
@@ -357,10 +358,10 @@ public class EventServices implements IEventServices {
 
         eventRepository.save(e);
         if (e.getModeEvent().equals(Mode.Face_To_Face)) {
-            scheduledAssignRoom();
+            assignRoom(e);
         }
         AssignSpeakerToEvent(e.getIdEvent());
-        //findUsersByEvent(e);
+        findUsersByEvent(e);
 
         return e;
     }
@@ -475,7 +476,7 @@ public class EventServices implements IEventServices {
             Event event = eventRepository.findEventByActivationCode(activationCode);
             Speaker speaker = speakerRepository.findSpeakerByActivationCode(activationCode);
 
-            if (event != null && speaker != null && event.getDateS().isBefore(LocalDateTime.now())) {
+            if (event != null && speaker != null && event.getDateS().isAfter(LocalDateTime.now())) {
                 AssignSpeakerToConfirmed(speaker.getIdSpeaker(), event.getIdEvent());
                 return "Successful confirmation";
             } else {
@@ -499,7 +500,7 @@ public class EventServices implements IEventServices {
         Event event = eventRepository.findById(id).orElse(null);
         Room room = event.getRoom();
         event.setRoom(null);
-       // room.setAvailable(true);
+        // room.setAvailable(true);
         roomRepository.save(room);
         eventRepository.save(event);
     }
@@ -519,19 +520,21 @@ public class EventServices implements IEventServices {
             return;
         }
 
+        // Users avec nbr reserv Similaire
         Map<User,Integer> map = new HashMap<>();
         for(User user : users){
             if(user.getInscription().getAccount().getReservations()!=null){
                 for (Reservation reservation : user.getInscription().getAccount().getReservations()) {
-                    if (reservation.getEvent().getTypeEvent().toString().equals(typeEvent)) {
-                        map.put(user, map.getOrDefault(user, 0) + 1);
+                    if (reservation.getEvent().getTypeEvent().toString().equals(typeEvent)) { // si reservation nafs type event ajouté
+                        map.put(user, map.getOrDefault(user, 0) + 1); // nbr reserv silimaire +1
                     }
                 }
             }
         }
 
-        List<Map.Entry<User, Integer>> sortedEntries = new ArrayList<>(map.entrySet());
-        sortedEntries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        //liste trier en fonction nbr reservation similaire
+        List<Map.Entry<User, Integer>> sortedEntries = new ArrayList<>(map.entrySet()); // liste trier de façon decroissante pour avoir les 10 tops premier
+        sortedEntries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder())); // decroissant
         List<User> topUsers = new ArrayList<>();
         int count = 0;
         for (Map.Entry<User, Integer> entry : sortedEntries) {
@@ -568,14 +571,14 @@ public class EventServices implements IEventServices {
         LocalDateTime dateStart = event.getDateS();
         LocalDateTime dateEnd = event.getDateF();
         for (Event e : room.getEvents()) {
-            if (dateStart.isBefore(e.getDateF()) && dateEnd.isAfter(e.getDateF())) {
+            if (dateStart.isBefore(e.getDateF()) && dateEnd.isAfter(e.getDateF()) || dateStart.equals(e.getDateS())) {
                 return false;
             }
         }
         return true;
     }
 
-    //@Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 30000)
     @Transactional
     public void scheduledAssignRoom() {
         unassignRoomIfEventEnded();
@@ -594,6 +597,24 @@ public class EventServices implements IEventServices {
                             roomRepository.save(r);
                             break;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    public void assignRoom(Event e){
+        List<Room> rooms = new ArrayList<>();
+        roomRepository.findAll().forEach(rooms::add);
+        if (e.getDateS().isAfter(LocalDateTime.now())) {
+            if (e.getRoom() == null) {
+                for (Room r : rooms) {
+                    if (checkDisponibilite(e, r)) {
+                        rooms.remove(r);
+                        e.setRoom(r);
+                        eventRepository.save(e);
+                        roomRepository.save(r);
+                        break;
                     }
                 }
             }
@@ -627,13 +648,15 @@ public class EventServices implements IEventServices {
             if (reservation.getDateRes().isBefore(e.getDateS())) {
                 reservation.setEvent(e);
                 reservation.setAccount(a);
-                reservation.setEtatPres(false);
+                reservation.setEtatPres(true);
                 reservationRepository.save(reservation);
                 n = n - 1;
                 e.setNbPartEvent(n);
                 eventRepository.save(e);
                 System.out.println("Your reservation has been successful");
             }
+        }
+        else {
             System.out.println("No places available yet");
         }
 
@@ -671,9 +694,9 @@ public class EventServices implements IEventServices {
                 reservation.setConfirmPay(true);
                 reservationRepository.save(reservation);
 
-                String to = reservation.getAccount().getUser().getEmail();
+                String to = reservation.getAccount().getInscription().getUser().getEmail();
                 String subject = "Payment Confirmation";
-                String body = "Dear \n\n" + reservation.getAccount().getUser().getFirstName() + reservation.getAccount().getUser().getLastName() +
+                String body = "Dear \n\n" + reservation.getAccount().getInscription().getUser().getFirstName() + reservation.getAccount().getInscription().getUser().getLastName() +
                         "\n" +
                         "We are writing to confirm the receipt of your payment. We appreciate your prompt action in submitting the payment."
                         + "If you have any further questions or concerns regarding your payment, please do not hesitate to contact us. We are always here to assist you in any way possible."
@@ -725,7 +748,7 @@ public class EventServices implements IEventServices {
 
         if (event.getDateF().isAfter(LocalDateTime.now())) {
             for (Reservation r : event.getReservations()) {
-                if(event.getModePay().equals(ModePay.Paid) && r.isConfirmPay()){
+                if((event.getModePay().equals(ModePay.Paid) && r.isConfirmPay()) || event.getModePay().equals(ModePay.Unpaid) ){
                     if (r.getEtatPres()) {
                         Certificate c = new Certificate();
 
@@ -775,7 +798,7 @@ public class EventServices implements IEventServices {
 
         // Upload the PDF file to Dropbox
         DbxRequestConfig config = new DbxRequestConfig("PHSET", "en_US");
-        DbxClientV2 client = new DbxClientV2(config, "sl.BaiHnigppfSgR9V7Bl0eDUM0U-K662hda0ZRr-iKfFYTxOF1Imrj7GGNidgGC1-IxjszVkAdzbYsmDmKlfsXOB01om0niVermlv3p8DTrae2MP5UEBgqsMCP0NE6wjQgIUmtU5Azg6n3");
+        DbxClientV2 client = new DbxClientV2(config, "sl.BakBTpbvO3NfCST5gVEPrGJ_xtOadHUChdUU-j_AyoZUpiuL1XFw_82z3a9MO-nQpBsu5UouS0-Yud0PchESM1R4J0xJhkFUI-TPpWGnrYmMkJ353YKoR9MuNDkMTUYk0eqI7D6e-85Z");
         String dropboxLink = null;
         try (InputStream in = new FileInputStream(file)) {
             FileMetadata metadata = client.files().uploadBuilder("/pdfs/" + e.getIdEvent() + certificat.getAccount().getIdAccount()+ "_certificate.pdf").uploadAndFinish(in);
@@ -791,7 +814,7 @@ public class EventServices implements IEventServices {
         byte[] qrCodeBytes = qrCodeStream.toByteArray();
 
         // Send the email with the PDF and QR code attachments
-        String to = certificat.getAccount().getUser().getEmail();
+        String to = certificat.getAccount().getInscription().getUser().getEmail();
         String emailSubject = "Certificate and QR Code";
         String emailBody = "Please find attached your certificate and QR code.";
         sendEmailWithAttachment(to, emailSubject, emailBody, qrCodeBytes);
@@ -875,7 +898,7 @@ public class EventServices implements IEventServices {
 
         // Configurer l'API Dropbox
         DbxRequestConfig config = new DbxRequestConfig("PHSET", "en_US");
-        String accessToken = "sl.Baju_k73PHsuf5W7vWVJsKJy4nH0VlaIqsf4fi32uBPHTCdo2cFsPy2W8mPAEUlJ5oH-4wLzJK9kbJp62uK9_aLMTp-BsgxTdXeN1qe4G9OZm5tKaq9tW-BfoyJhrwGxOisvtRTRNqLO";
+        String accessToken = "sl.BamXK0wHs3-qcKnmFiryY3FwPhX9FVtn3kjzYly9gK0HMLZslIA92KzipG2q2aoo1kjXTqm8D3mFboigGi_sOGYrFEVtbhdfGHWIBNRNvZhVI_19KWvfiR4tralgd-DYhfxoMUMnWuQB";
         DbxClientV2 client = new DbxClientV2(config, accessToken);
 
         // Télécharger la vidéo sur le serveur Dropbox
@@ -931,14 +954,13 @@ public class EventServices implements IEventServices {
     ///////////////////////////////////////////////////////// Planification de la journeé
 
 
-
     public void planEvent(int id) throws DocumentException, IOException {
         Event event = eventRepository.findById(id).orElse(null);
         List<Speaker> confirmedSpeakers = new ArrayList<>();
         event.getSpeakersconf().forEach(confirmedSpeakers::add);
 
         Document document = new Document();
-        PdfWriter.getInstance(document, Files.newOutputStream(Paths.get("D:\\Porjet PI\\PHSET-Spring-Angular\\src\\main\\java\\com\\pidev\\phset\\services\\test.pdf")));
+        PdfWriter.getInstance(document, Files.newOutputStream(Paths.get("D:\\Porjet PI\\PHSET-Spring-Angular\\src\\main\\java\\com\\pidev\\phset\\services\\Plannig" + event.getIdEvent() +".pdf")));
         document.open();
         String description = event.getDescriptionEvent();
         int i =0;
@@ -978,7 +1000,6 @@ public class EventServices implements IEventServices {
             table.addCell("DJ");
         }
 
-
         if (bk) {
             table.addCell("Break");
         }
@@ -987,6 +1008,7 @@ public class EventServices implements IEventServices {
             table.addCell("game");
         }
 
+        //besh nekhou sweyaa o minute
         LocalTime startTime = LocalTime.of(event.getDateS().getHour(),event.getDateS().getMinute());
 
         for (Speaker speaker : confirmedSpeakers) {

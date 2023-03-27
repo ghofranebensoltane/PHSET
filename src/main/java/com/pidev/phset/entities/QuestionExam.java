@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -17,10 +18,13 @@ public class QuestionExam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idQuestExam;
     String textQuestExam;
+    @Enumerated(EnumType.STRING)
+    Technology technology;
 
     @ManyToOne
     Exam exam;
 
-    @OneToOne
-    ReponseExam reponseExam;
+    @OneToMany(mappedBy = "questionExam")
+    //@JsonIgnore
+    Set<ReponseExam> reponsesExam;
 }
